@@ -2,7 +2,6 @@ import {
     Card,
     Grid,
     Button,
-    Checkbox,
     CircularProgress,
     FormControlLabel,
 } from '@mui/material'
@@ -12,7 +11,10 @@ import { useNavigate } from 'react-router-dom'
 import { Box, styled, useTheme } from '@mui/system'
 import { TextValidator, ValidatorForm } from 'react-material-ui-form-validator'
 import { Paragraph, Span } from 'app/components/Typography';
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
+import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
+
 
 const FlexBox = styled(Box)(() => ({
     display: 'flex',
@@ -54,7 +56,7 @@ const JwtLogin = () => {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const [userInfo, setUserInfo] = useState({
-        password: 'dummyPass',
+
     })
     const [message, setMessage] = useState('')
     const { login } = useAuth()
@@ -85,10 +87,12 @@ const JwtLogin = () => {
         register,
         watch,
         formState: { errors },
-        handleSubmit
+        handleSubmit,
+        control,
     } = useForm({
         defaultValues: {
-            email: 'a@mail.ru'
+            email: 'a@mail.ru',
+            password: 'dummyPass',
 
         }
     });
@@ -111,8 +115,50 @@ const JwtLogin = () => {
                     </Grid>
                     <Grid item lg={7} md={7} sm={7} xs={12}>
                         <ContentBox>
-                            <ValidatorForm onSubmit={handleFormSubmit}>
-                                <TextValidator
+                            <form onSubmit={handleFormSubmit}>
+                                <Controller
+                                    control={control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <TextField {...field} sx={{ mb: 3, width: '100%' }} />
+                                    )}
+                                />
+
+                                <Controller
+                                    control={control}
+                                    name="password"
+                                    type="password"
+                                    render={({ field }) => (
+                                        <TextField {...field} sx={{ mb: '12px', width: '100%' }} />
+                                    )}
+                                />
+                                <Controller
+                                    control={control}
+                                    name="agreement"
+                                    render={({ field }) => (
+                                        <FormControlLabel control={<Checkbox defaultChecked />} label="Remeber me" />
+                                    )}
+                                />
+
+                                <Box position="relative">
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        disabled={loading}
+                                        type="submit"
+                                    >
+                                        Sign in
+                                    </Button>
+                                    {loading && (
+                                        <StyledProgress
+                                            size={24}
+                                            className="buttonProgress"
+                                        />
+                                    )}
+                                </Box>
+                            </form>
+                            <ValidatorForm>
+                                {/* <TextValidator
                                     sx={{ mb: 3, width: '100%' }}
                                     variant="outlined"
                                     size="small"
@@ -120,7 +166,7 @@ const JwtLogin = () => {
                                     //onChange={handleChange}
                                     type="email"
                                     name="email"
-                                    
+
                                     //validators={['required', 'isEmail']}
                                     errorMessages={[
                                         'this field is required',
@@ -140,8 +186,8 @@ const JwtLogin = () => {
                                     value={userInfo.password}
                                     validators={['required']}
                                     errorMessages={['this field is required']}
-                                />
-                                <FormControlLabel
+                                /> */}
+                                {/* <FormControlLabel
                                     sx={{ mb: '12px', maxWidth: 288 }}
                                     name="agreement"
                                     onChange={handleChange}
@@ -162,7 +208,7 @@ const JwtLogin = () => {
                                         />
                                     }
                                     label="Remeber me"
-                                />
+                                /> */}
 
                                 {message && (
                                     <Paragraph sx={{ color: textError }}>
@@ -171,7 +217,7 @@ const JwtLogin = () => {
                                 )}
 
                                 <FlexBox mb={2} flexWrap="wrap">
-                                    <Box position="relative">
+                                    {/* <Box position="relative">
                                         <Button
                                             variant="contained"
                                             color="primary"
@@ -186,7 +232,7 @@ const JwtLogin = () => {
                                                 className="buttonProgress"
                                             />
                                         )}
-                                    </Box>
+                                    </Box> */}
                                     <Span sx={{ mr: 1, ml: '20px' }}>or</Span>
                                     <Button
                                         sx={{ textTransform: 'capitalize' }}

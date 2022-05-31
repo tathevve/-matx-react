@@ -11,6 +11,7 @@ const userList = [
         name: 'Jason Alexander',
         username: 'jason_alexander',
         email: 'a@mail.ru',
+        password: 'dummyPass',
         avatar: '/assets/images/face-6.jpg',
         age: 25,
     },
@@ -25,7 +26,9 @@ Mock.onPost('/api/auth/login').reply(async (config) => {
     try {
         await new Promise((resolve) => setTimeout(resolve, 1000))
 
-        const { email } = JSON.parse(config.data)
+        const { email } = JSON.parse(config.data) //email
+        // const email = 'a@mail.ru'
+        // const password = 'dummyPass'
         const user = userList.find((u) => u.email === email)
 
         if (!user) {
@@ -43,6 +46,7 @@ Mock.onPost('/api/auth/login').reply(async (config) => {
                     id: user.id,
                     avatar: user.avatar,
                     email: user.email,
+                    password:user.password,
                     name: user.name,
                     role: user.role,
                 },
